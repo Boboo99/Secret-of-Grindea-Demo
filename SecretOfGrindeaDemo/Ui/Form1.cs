@@ -47,12 +47,26 @@ namespace SecretOfGrindeaDemo
             catch (TypeNotSupportedException) { }
         }
 
+        ProcessHandler cancerGame;
+
         public Ui()
         {
             InitializeComponent();
-        }
 
-        ProcessHandler cancerGame = new ProcessHandler("Secrets Of Grindea");
+            try
+            {
+                cancerGame = new ProcessHandler("Secrets Of Grindea");
+            } catch(Exception e)
+            {
+                if(e is ProcessNotFoundException)
+                    MessageBox.Show("Run the game..");
+                else if (e is MissingAdminRightsException)
+                    MessageBox.Show("Run Trainer as an Administrator...");
+
+                Environment.Exit(0); //The message loop isn't even run yet, so we dont't Application.Exit();
+            }
+
+        }
 
         private IntPtr _healthAsmLocation = IntPtr.Zero;
         private IntPtr _energyAsmLocation = IntPtr.Zero;
